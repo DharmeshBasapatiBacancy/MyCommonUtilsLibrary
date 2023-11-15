@@ -1,8 +1,7 @@
 package com.example.mycommonutilslibrary
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
 import com.example.ourbaseutils.api.Resource

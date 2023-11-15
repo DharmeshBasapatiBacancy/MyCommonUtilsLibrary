@@ -48,5 +48,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation(project(":OurBaseUtils"))
+    //Using local module of the project
+    //implementation(project(":OurBaseUtils"))
+
+    //Using published module from jitpack.io
+    implementation("com.github.DharmeshBasapatiBacancy:MyCommonUtilsLibrary:1.0")
 }
