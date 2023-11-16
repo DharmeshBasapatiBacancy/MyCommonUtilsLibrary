@@ -1,6 +1,7 @@
 package com.example.mycommonutilslibrary
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
@@ -8,6 +9,7 @@ import com.example.ourbaseutils.api.Resource
 import com.example.ourbaseutils.common.NetworkUtil
 import com.example.ourbaseutils.logging.showLongToast
 import com.example.ourbaseutils.logging.showShortToast
+import com.example.ourbaseutils.sharedPreference.Prefs
 import com.example.ourbaseutils.views.visible
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Prefs.init(this)
 
         //Using View Extensions
         binding.tvSample.visible()
@@ -33,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             showLongToast("You are NOT connected to internet !!!")
         }
+
+        //Using shared preferences set and get helper methods
+        Prefs["NAME"] = "John Doe"
+        Log.d("MainActivity", "Shared Pref Value = ${Prefs["NAME", ""]}")
 
     }
 }

@@ -44,7 +44,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.DharmeshBasapatiBacancy"
             artifactId = "our-base-utils"
-            version = "1.0"
+            version = "1.0.1"
 
             afterEvaluate {
                 from(components["release"])
