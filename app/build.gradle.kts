@@ -52,5 +52,5 @@ dependencies {
     //implementation(project(":OurBaseUtils"))
 
     //Using published module from jitpack.io
-    implementation("com.github.DharmeshBasapatiBacancy:MyCommonUtilsLibrary:1.0.2")
+    implementation("com.github.DharmeshBasapatiBacancy:MyCommonUtilsLibrary:1.0.3")
 }

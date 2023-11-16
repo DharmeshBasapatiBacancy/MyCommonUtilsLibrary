@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
 import com.example.ourbaseutils.api.Resource
 import com.example.ourbaseutils.common.NetworkUtil
+import com.example.ourbaseutils.logging.showELog
 import com.example.ourbaseutils.logging.showLongToast
 import com.example.ourbaseutils.logging.showShortToast
 import com.example.ourbaseutils.sharedPreference.Prefs
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         //Using shared preferences set and get helper methods
         Prefs["NAME"] = "John Doe"
-        Log.d("MainActivity", "Shared Pref Value = ${Prefs["NAME", ""]}")
+        showELog("Shared Pref Value = ${Prefs["NAME", ""]}")
 
     }
 }
