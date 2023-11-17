@@ -1,10 +1,15 @@
 package com.example.mycommonutilslibrary
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
+import com.example.ourbaseutils.alerts.negativeButton
+import com.example.ourbaseutils.alerts.positiveButton
+import com.example.ourbaseutils.alerts.showAlertDialog
+import com.example.ourbaseutils.alerts.showDatePickerDialog
+import com.example.ourbaseutils.alerts.showMaterialAlertDialog
+import com.example.ourbaseutils.alerts.showTimePickerDialog
 import com.example.ourbaseutils.api.Resource
 import com.example.ourbaseutils.common.NetworkUtil
 import com.example.ourbaseutils.logging.showELog
@@ -43,5 +48,41 @@ class MainActivity : AppCompatActivity() {
         Prefs["NAME"] = "John Doe"
         showELog("Shared Pref Value = ${Prefs["NAME", ""]}")
 
+        binding.btnShowSimpleAlertDialog.setOnClickListener {
+            //Using alert dialog extension function
+            showAlertDialog(
+                "Title",
+                "Message",
+                "Yes" to { onDialogActionClicked("Yes") },
+                "No" to { onDialogActionClicked("No") })
+
+        }
+
+        binding.btnShowMaterialAlertDialog.setOnClickListener {
+            //Using alert dialog extension function
+            showMaterialAlertDialog {
+                setTitle("Confirm")
+                setMessage("Are you sure you want to delete this item?")
+                positiveButton("Ok") { onDialogActionClicked("Ok") }
+                negativeButton("Cancel") { onDialogActionClicked("Cancel") }
+            }
+        }
+
+        binding.btnShowDatePicker.setOnClickListener {
+            showDatePickerDialog {
+                showLongToast("Date = ${it.time}")
+            }
+        }
+
+        binding.btnShowTimePicker.setOnClickListener {
+            showTimePickerDialog { hour, minute ->
+                val selectedTime = String.format("%02d:%02d", hour, minute)
+                showLongToast("Time = $selectedTime")
+            }
+        }
+    }
+
+    private fun onDialogActionClicked(message: String) {
+        showShortToast("$message Clicked")
     }
 }
