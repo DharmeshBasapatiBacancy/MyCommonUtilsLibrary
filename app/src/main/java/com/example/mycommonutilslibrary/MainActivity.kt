@@ -1,9 +1,11 @@
 package com.example.mycommonutilslibrary
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
+import com.example.mycommonutilslibrary.permission.permissions
 import com.example.ourbaseutils.alerts.negativeButton
 import com.example.ourbaseutils.alerts.positiveButton
 import com.example.ourbaseutils.alerts.showAlertDialog
@@ -15,10 +17,19 @@ import com.example.ourbaseutils.common.NetworkUtil
 import com.example.ourbaseutils.logging.showELog
 import com.example.ourbaseutils.logging.showLongToast
 import com.example.ourbaseutils.logging.showShortToast
+import com.example.ourbaseutils.permissions.Permis
+import com.example.ourbaseutils.permissions.Permission
+import com.example.ourbaseutils.permissions.PermissionHandlerCallback
 import com.example.ourbaseutils.sharedPreference.Prefs
 import com.example.ourbaseutils.views.visible
 
+
+
+
 class MainActivity : AppCompatActivity() {
+
+    val permissionCode = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,9 +91,52 @@ class MainActivity : AppCompatActivity() {
                 showLongToast("Time = $selectedTime")
             }
         }
+
+
+        binding.btnPickImage.setOnClickListener {
+
+            Permis(
+                permissions(),
+                permissionCode,
+                this
+            ).setPermission(object : Permission{
+                override fun onGranted() {
+                    Log.d("setOnClickListener","onGranted")
+                }
+
+                override fun onDenied() {
+                    Log.d("setOnClickListener","onDenied")
+                }
+
+                override fun onDeniedPermanently() {
+                    Log.d("setOnClickListener","onDeniedPermanently")
+                }
+            })
+        }
     }
+
 
     private fun onDialogActionClicked(message: String) {
         showShortToast("$message Clicked")
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        PermissionHandlerCallback
+            .onRequestPermissionsResult(
+                this,
+                permissionCode,
+                requestCode,
+                permissions,
+                grantResults,
+                isShowCustomPopup = false
+            )
+
+        Log.d("HandlePermission","onRequestPermissionsResult MainActivity")
+    }
+
 }
