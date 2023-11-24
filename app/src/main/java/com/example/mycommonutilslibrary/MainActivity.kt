@@ -1,6 +1,10 @@
 package com.example.mycommonutilslibrary
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -20,20 +24,25 @@ import com.example.ourbaseutils.logging.showShortToast
 import com.example.ourbaseutils.permissions.Permis
 import com.example.ourbaseutils.permissions.Permission
 import com.example.ourbaseutils.permissions.PermissionHandlerCallback
+import com.example.ourbaseutils.picture.showSelectionPopup
 import com.example.ourbaseutils.sharedPreference.Prefs
 import com.example.ourbaseutils.views.visible
 
 
-
-
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     val permissionCode = 0
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var a: String = "interview"
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         Prefs.init(this)
@@ -102,6 +111,10 @@ class MainActivity : AppCompatActivity() {
             ).setPermission(object : Permission{
                 override fun onGranted() {
                     Log.d("setOnClickListener","onGranted")
+                    showSelectionPopup(this@MainActivity)
+
+
+
                 }
 
                 override fun onDenied() {
@@ -115,6 +128,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getStr(): String {
+        return "asr"
+    }
+
 
     private fun onDialogActionClicked(message: String) {
         showShortToast("$message Clicked")
@@ -126,6 +143,8 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("HandlePermission","onRequestPermissionsResult MainActivity")
+
         PermissionHandlerCallback
             .onRequestPermissionsResult(
                 this,
@@ -136,7 +155,18 @@ class MainActivity : AppCompatActivity() {
                 isShowCustomPopup = false
             )
 
-        Log.d("HandlePermission","onRequestPermissionsResult MainActivity")
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            // There are no request codes
+            Log.d("showSelectionPopup","result = $data")
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+
+            binding.image.setImageBitmap(bitmap)
+
+        }
+    }
 }

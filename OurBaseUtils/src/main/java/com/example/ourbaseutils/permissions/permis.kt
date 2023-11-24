@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -39,6 +40,8 @@ class Permis(
 
 object PermissionHandlerCallback {
 
+    private var isAllPermissionGranted: Boolean = false
+
     fun onRequestPermissionsResult(
         mainActivity: Activity,
         permissionCode: Int,
@@ -54,14 +57,41 @@ object PermissionHandlerCallback {
 
                 Log.d("HandlePermission","Permission size = ${grantResults.size}")
 
-                for (i in grantResults) {
+                for (value in grantResults) {
 
-                    if (grantResults.isNotEmpty() && grantResults[i] == PackageManager.PERMISSION_GRANTED){
-                        Log.d("HandlePermission","Permission Granted")
-                        permissionListener.onGranted()
-                    }else {
+                    isAllPermissionGranted = grantResults.isNotEmpty() && value == PackageManager.PERMISSION_GRANTED
+
+                }
 
 
+                if (isAllPermissionGranted){
+                    Log.d("HandlePermission","Permission Granted")
+                    permissionListener.onGranted()
+                }else {
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        if (ActivityCompat.checkSelfPermission(mainActivity,Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED){
+
+                            if (Prefs[Constant.ALLOWED]){
+
+                                //Permanent Denied
+                                Action.startAppSettingsConfigActivity(mainActivity)
+                                permissionListener.onDeniedPermanently()
+
+                            }else {
+
+                                permissionListener.onDenied()
+                                Action.showMessageOKCancel(mainActivity,"You need to allow access permissions",
+                                ) { _, _ ->
+                                    Action.requestPermission(mainActivity,permissions,permissionCode)
+                                    Prefs[Constant.ALLOWED] = true
+                                }
+                            }
+
+                        }
+
+                    } else {
                         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -83,9 +113,10 @@ object PermissionHandlerCallback {
                                 }
                             }
                         }
-                        break
+
                     }
                 }
+
             }
         }
     }
