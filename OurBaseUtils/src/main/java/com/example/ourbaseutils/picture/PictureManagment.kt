@@ -1,12 +1,8 @@
 package com.example.ourbaseutils.picture
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.ourbaseutils.alerts.negativeButton
@@ -33,6 +29,11 @@ fun Context.showSelectionPopup(activity: AppCompatActivity){
 
         }
         negativeButton("Gallery") {
+
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(activity,Intent.createChooser(intent, "Select Picture"),2,null)
 
         }
     }

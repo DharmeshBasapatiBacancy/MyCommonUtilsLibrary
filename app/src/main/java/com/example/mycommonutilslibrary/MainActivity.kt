@@ -1,10 +1,7 @@
 package com.example.mycommonutilslibrary
 
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +18,7 @@ import com.example.ourbaseutils.common.NetworkUtil
 import com.example.ourbaseutils.logging.showELog
 import com.example.ourbaseutils.logging.showLongToast
 import com.example.ourbaseutils.logging.showShortToast
+import com.example.ourbaseutils.permissions.Action
 import com.example.ourbaseutils.permissions.Permis
 import com.example.ourbaseutils.permissions.Permission
 import com.example.ourbaseutils.permissions.PermissionHandlerCallback
@@ -113,15 +111,15 @@ class MainActivity : AppCompatActivity() {
                     Log.d("setOnClickListener","onGranted")
                     showSelectionPopup(this@MainActivity)
 
-
-
                 }
 
                 override fun onDenied() {
+                    //If you want to show custom dialog here
                     Log.d("setOnClickListener","onDenied")
                 }
 
                 override fun onDeniedPermanently() {
+                    //If you want to show custom dialog here
                     Log.d("setOnClickListener","onDeniedPermanently")
                 }
             })
@@ -160,13 +158,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            Log.d("showSelectionPopup","result = $data")
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+        val bitmap = Action.getReturnBitmap(requestCode, resultCode, data,this)
+        binding.image.setImageBitmap(bitmap)
 
-            binding.image.setImageBitmap(bitmap)
-
-        }
     }
 }

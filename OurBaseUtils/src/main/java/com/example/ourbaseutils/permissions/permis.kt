@@ -3,11 +3,14 @@ package com.example.ourbaseutils.permissions
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -156,6 +159,33 @@ object Action {
             mainActivity, permissions,
             permissionCode
         )
+    }
+
+    fun getReturnBitmap(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        mContext: Context
+    ): Bitmap? {
+
+        if (resultCode == Activity.RESULT_OK) {
+            Log.d("showSelectionPopup","result = $data")
+
+
+            return if (requestCode == 1){ // From Camera
+                val imageBitmap = data?.extras?.get("data") as Bitmap
+                Log.d("onActivityResult","Camera = $imageBitmap")
+                imageBitmap
+            }else { // From Gallery
+
+                val bitmap = MediaStore.Images.Media.getBitmap(mContext.contentResolver, data?.data)
+                Log.d("onActivityResult","Gallery")
+                bitmap
+            }
+
+        }
+        return null
+
     }
 
 
