@@ -17,13 +17,66 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+
+        create("DEBUG") {
+            storeFile = file("${rootDir}/development_keystore.jks")
+            storePassword = "123456"
+            keyAlias = "development_keystore"
+            keyPassword = "123456"
+        }
+
+        create("RELEASE") {
+            storeFile = file("${rootDir}/production_keystore.jks")
+            storePassword = "123456"
+            keyAlias = "production_keystore"
+            keyPassword = "123456"
+        }
+    }
+
+    flavorDimensions += "default"
+
+    productFlavors {
+
+        create("dev") {
+            dimension = "default"
+            applicationIdSuffix = ".dev"
+        }
+
+        create("prod") {
+            dimension = "default"
+        }
+    }
+
+    android.applicationVariants.all {
+
+        when (flavorName) {
+            "dev" -> {
+                buildConfigField("String","BaseURL", project.findProperty("DEV_BASE_URL").toString())
+            }
+
+            "prod" -> {
+                buildConfigField("String","BaseURL", project.findProperty("PROD_BASE_URL").toString())
+            }
+        }
+    }
+
     buildTypes {
+
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+            signingConfig = signingConfigs["DEBUG"]
+        }
+
         release {
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs["RELEASE"]
         }
     }
     compileOptions {
@@ -35,6 +88,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
