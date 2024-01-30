@@ -2,7 +2,8 @@ package com.example.mycommonutilslibrary
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mycommonutilslibrary.BuildConfig.*
+import com.example.mycommonutilslibrary.BuildConfig.FLAVOR
+import com.example.mycommonutilslibrary.BuildConfig.VERSION_NAME
 import com.example.mycommonutilslibrary.databinding.ActivityLoginBinding
 import com.example.ourbaseutils.logging.showLongToast
 import com.example.ourbaseutils.logging.showShortToast
