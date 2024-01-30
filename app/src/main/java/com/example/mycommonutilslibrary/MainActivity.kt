@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.mycommonutilslibrary.databinding.ActivityMainBinding
+import com.example.mycommonutilslibrary.permission.UserPermissionActivity
+import com.example.mycommonutilslibrary.permission.UserPermissionFragment
 import com.example.ourbaseutils.alerts.negativeButton
 import com.example.ourbaseutils.alerts.positiveButton
 import com.example.ourbaseutils.alerts.showAlertDialog
@@ -86,6 +88,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
+        binding.btnUserPermissionPage.setOnClickListener {
+            startActivity(Intent(this, UserPermissionActivity::class.java))
+
+        }
 
     }
 

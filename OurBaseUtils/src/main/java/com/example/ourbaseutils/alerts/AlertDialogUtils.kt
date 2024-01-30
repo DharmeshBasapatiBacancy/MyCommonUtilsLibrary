@@ -1,8 +1,12 @@
 package com.example.ourbaseutils.alerts
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.annotation.StyleRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -57,4 +61,22 @@ fun MaterialAlertDialogBuilder.neutralButton(
     handleClick: (dialogInterface: DialogInterface) -> Unit = { it.dismiss() }
 ) {
     this.setNeutralButton(text) { dialogInterface, _ -> handleClick(dialogInterface) }
+}
+
+// function to show settings dialog
+fun Context.showSettingsDialog(activity: Activity?) {
+
+    //Using alert dialog extension function
+    activity?.showMaterialAlertDialog {
+        setTitle("Confirm")
+        setMessage("Please goto setting and give all permission")
+        positiveButton("Go to Settings") {
+            // Open the app settings
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", activity.packageName, null)
+            intent.data = uri
+            activity.startActivity(intent)
+        }
+        negativeButton("Cancel") {}
+    }
 }
